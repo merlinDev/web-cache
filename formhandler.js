@@ -102,6 +102,7 @@ function processForm(formID) {
   };
 
   const isOnline = window.navigator.onLine;
+  console.log("client is online: ", isOnline);
   if (isOnline) {
     // send the form data directly to the server
     submitForm(formData);
@@ -137,7 +138,7 @@ function processForm(formID) {
 
 function submitForm(formData) {
   // submit the formdata
-  const url = "http://192.53.161.88/demo.php";
+  const url = "https://60d347d2858b410017b2f60c.mockapi.io/users";
   fetch(url, {
     method: "POST",
     headers: {
