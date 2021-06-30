@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/data.css" />
     <title>Form Data</title>
 
     <style>
@@ -17,7 +18,7 @@
 
       .form-parent {
         width: 100%;
-        height: 100vh;
+        height: 50vh;
         display: flex;
         justify-content: center;
       }
@@ -60,22 +61,12 @@
             </button>
           </div>
         </form>
-
-        <div style="margin-top: 5rem">
-          <input
-            type="text"
-            name="filename"
-            id="filename"
-            placeholder="filename"
-          />
-          <button onclick="readFile(document.querySelector('#filename').value)">
-            load file
-          </button>
-        </div>
       </div>
     </div>
 
-    <div id="viewer"></div>
+    <div style="text-align: center;">
+      <a style="color: white;" href="/data.html">zip playground</a>
+    </div>
   </body>
 
   <!-- must add these two scrips to each and every pages at the end -->
