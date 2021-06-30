@@ -105,6 +105,9 @@ const fileTypes = {
     "mp4",
     "mpeg",
     "3gp",
+  ],
+  styles: [
+    "css"
   ]
 };
 

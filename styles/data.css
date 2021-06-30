@@ -38,6 +38,13 @@ body {
   color: white;
   border-radius: 4px;
   background-color: #3ba819;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.main button:hover {
+  background-color: #24690f;
 }
 
 #playground {
@@ -51,6 +58,6 @@ body {
 }
 
 #playground * {
-  margin: .5rem 1rem;
+  margin: 0.5rem 1rem;
 }
 /*# sourceMappingURL=data.css.map */

@@ -1,5 +1,7 @@
 const zipURL = `${_zipdir}data.zip`;
+
 storeZip(zipURL);
+readFile('data.css');
 
 function storeZip(url) {
   caches.open("cache-files").then((cache) => {
@@ -13,15 +15,18 @@ function storeZip(url) {
 }
 
 function readFile(filename) {
+  console.log(`reading file ${filename}...`);
+  
   const type = filename.split(".").pop();
   const loader = new ZipLoader(zipURL);
   loader.load().then(() => {
     const url = loader.extractAsBlobUrl(filename, mimeTypes[type]);
-    wrapper(url, type);
+    loadFile(url, type);
   });
 }
 
-function wrapper(url, type) {
+function loadFile(url, type) {
+  console.log('reading file...');
   const parser = new DOMParser();
   const main = document.querySelector("#playground");
 
@@ -40,7 +45,7 @@ function wrapper(url, type) {
         main.appendChild(html.body);
       });
 
-      // for xmls
+    // for xmls
   } else if (fileTypes.xmls.includes(type)) {
     fetch(url)
       .then((response) => response.text())
@@ -48,7 +53,7 @@ function wrapper(url, type) {
         const xml = parser.parseFromString(raw, mimeTypes[type]);
       });
 
-      // for audios
+    // for audios
   } else if (fileTypes.audios.includes(type)) {
     const audio = document.createElement("audio");
     audio.src = url;
@@ -65,5 +70,13 @@ function wrapper(url, type) {
     // video.controls = true;
     video.autoplay = true;
     main.appendChild(video);
+    // for styles
+  } else if (fileTypes.styles.includes(type)) {
+    const head = document.getElementsByTagName("head")[0];
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.type = "text/css";
+    link.href = url;
+    head.appendChild(link);
   }
 }
