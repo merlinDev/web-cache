@@ -1,16 +1,36 @@
-// const loader = new ZipLoader("test_file.zip");
+const zip = new JSZip();
+zip.file("test.txt", "test text file");
 
-caches.match("/test_file.zip").then((response) => {
-  console.log("looging for the file...");
-  if (response) {
-    console.log('response: ', response);
-    const zipURL = response.url;
-    console.log("url: ", zipURL);
-    const loader = new ZipLoader(zipURL);
-    loader.load().then(() => {
-      const files = loader.files;
-      console.log("files: ", files);
-      console.log("file: ", files["test_file.txt"]);
-    });
-  }
+zip.generateAsync({ type: "blob" }).then((blob) => {
+  const url = URL.createObjectURL(blob);
+  console.log(url);
+  getZip(url);
 });
+
+function getZip(url) {
+  caches.open("cache-files").then((cache) => {
+    console.log(cache);
+    cache
+      .add(url)
+      .then(() => console.log("zip added to the cache"))
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+}
+
+function readZip() {
+  caches.match("/data.zip").then((result) => {
+    if (result) {
+      const zipURL = result.url;
+      const loader = new ZipLoader(zipURL);
+      loader.load().then(() => {
+        console.log(loader.files["data/"]);
+      });
+    }
+  });
+}
+
+function wrapper(file) {
+  const type = file.split(".")[file.lastIndexOf(".")];
+}

@@ -55,16 +55,25 @@
         <form id="mock-form">
           <div>
             <input id="name" type="text" name="name" placeholder="name" />
-            <button type="button" onclick="processForm('mock-form')">SEND DATA</button>
+            <button type="button" onclick="processForm('mock-form')">
+              SEND DATA
+            </button>
           </div>
         </form>
 
+        <div>
+          <button onclick="getZip('/data.zip')">download awsome.zip</button>
+        </div>
+        <div>
+          <button onclick="readZip()">read awsome.zip</button>
+        </div>
       </div>
     </div>
   </body>
 
   <!-- must add these two scrips to each and every pages at the end -->
   <script src="zip-loader.min.js"></script>
+  <script src="jszip.min.js"></script>
   <script src="ziphandler.js"></script>
   <script src="formhandler.js"></script>
   <script>

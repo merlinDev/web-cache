@@ -4,9 +4,9 @@ const files = [
   "/index.html",
   "/second.html",
   "/formhandler.js",
-  "/test_file.zip",
-  "zip-loader.min.js",
-  "ziphandler.js",
+  "/zip-loader.min.js",
+  "/jszip.min.js",
+  "/ziphandler.js",
 ];
 
 self.addEventListener("activate", (e) => {
