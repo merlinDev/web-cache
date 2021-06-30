@@ -4,9 +4,7 @@ window.indexedDB =
   window.webkitIndexedDB ||
   window.msIndexedDB;
 
-window.onload = () => {
-  checkFormDataPool();
-};
+checkFormDataPool();
 
 if (!window.indexedDB) {
   console.log("this browser doesn't support IncecDB");

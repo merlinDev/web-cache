@@ -61,30 +61,26 @@
           </div>
         </form>
 
-        <div>
-          <button onclick="getZip('/data.zip')">download awsome.zip</button>
-        </div>
-        <div>
-          <button onclick="readZip()">read awsome.zip</button>
+        <div style="margin-top: 5rem">
+          <input
+            type="text"
+            name="filename"
+            id="filename"
+            placeholder="filename"
+          />
+          <button onclick="readFile(document.querySelector('#filename').value)">
+            load file
+          </button>
         </div>
       </div>
     </div>
+
+    <div id="viewer"></div>
   </body>
 
   <!-- must add these two scrips to each and every pages at the end -->
-  <script src="zip-loader.min.js"></script>
-  <script src="jszip.min.js"></script>
-  <script src="ziphandler.js"></script>
-  <script src="formhandler.js"></script>
-  <script>
-    if ("serviceWorker" in navigator) {
-      let registration;
-      const registerServiceWorker = async () => {
-        registration = await navigator.serviceWorker.register(
-          "./serviceworker.js"
-        );
-      };
-      registerServiceWorker();
-    }
-  </script>
+  <script></script>
+  <script src="app.js"></script>
+  <script src="scripts/ziphandler.js"></script>
+  <script src="scripts/formhandler.js"></script>
 </html>

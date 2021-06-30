@@ -2,11 +2,10 @@ const cacheName = "cache-files";
 const files = [
   "/",
   "/index.html",
-  "/second.html",
-  "/formhandler.js",
-  "/zip-loader.min.js",
-  "/jszip.min.js",
-  "/ziphandler.js",
+  "/data.html",
+  "/scripts/ziphandler.js",
+  "/scripts/formhandler.js",
+  "app.js",
 ];
 
 self.addEventListener("activate", (e) => {

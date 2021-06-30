@@ -65,20 +65,7 @@
     </body>
   
     <!-- must add these two scrips to each and every pages at the end -->
-    <script src="zip-loader.min.js"></script>
     <script src="formhandler.js"></script>
     <script src="ziphandler.js"></script>
-
-    <script>
-      if ("serviceWorker" in navigator) {
-        let registration;
-        const registerServiceWorker = async () => {
-          registration = await navigator.serviceWorker.register(
-            "./serviceworker.js"
-          );
-        };
-        registerServiceWorker();
-      }
-    </script>
 </body>
 </html>
