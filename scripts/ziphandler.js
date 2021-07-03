@@ -1,7 +1,7 @@
 const zipURL = `${_zipdir}data.zip`;
 
 storeZip(zipURL);
-readFile('data.css');
+readFile("data.css");
 
 function storeZip(url) {
   caches.open("cache-files").then((cache) => {
@@ -9,24 +9,30 @@ function storeZip(url) {
       .add(url)
       .then(() => console.log("zip added to the cache"))
       .catch((error) => {
-        console.log(error);
+        console.log("error: ", error);
       });
   });
 }
 
 function readFile(filename) {
   console.log(`reading file ${filename}...`);
-  
+
   const type = filename.split(".").pop();
   const loader = new ZipLoader(zipURL);
-  loader.load().then(() => {
-    const url = loader.extractAsBlobUrl(filename, mimeTypes[type]);
-    loadFile(url, type);
-  });
+  loader
+    .load()
+    .then(() => {
+      const url = loader.extractAsBlobUrl(filename, mimeTypes[type]);
+      loadFile(url, type);
+    })
+    .catch((error) => {
+      alert("requested file is not in the file or this file does not support!");
+      console.log("error: ", error);
+    });
 }
 
 function loadFile(url, type) {
-  console.log('reading file...');
+  console.log("reading file...");
   const parser = new DOMParser();
   const main = document.querySelector("#playground");
 
@@ -42,6 +48,9 @@ function loadFile(url, type) {
       .then((response) => response.text())
       .then((raw) => {
         const html = parser.parseFromString(raw, mimeTypes[type]);
+        const textArea = document.createElement("textarea");
+        textArea.innerHTML = html.body.innerHTML;
+        main.appendChild(textArea);
         main.appendChild(html.body);
       });
 
@@ -51,6 +60,9 @@ function loadFile(url, type) {
       .then((response) => response.text())
       .then((raw) => {
         const xml = parser.parseFromString(raw, mimeTypes[type]);
+        const textArea = document.createElement("textarea");
+        textArea.innerHTML = xml.getElementsByTagName("catalog")[0].innerHTML;
+        main.appendChild(textArea);
       });
 
     // for audios
@@ -59,7 +71,7 @@ function loadFile(url, type) {
     audio.src = url;
     audio.type = mimeTypes[type];
     audio.autoplay = true;
-    // audio.controls = true;
+    audio.controls = true;
     main.appendChild(audio);
 
     // for videos
@@ -67,9 +79,10 @@ function loadFile(url, type) {
     const video = document.createElement("video");
     video.src = url;
     video.type = mimeTypes[type];
-    // video.controls = true;
+    video.controls = true;
     video.autoplay = true;
     main.appendChild(video);
+
     // for styles
   } else if (fileTypes.styles.includes(type)) {
     const head = document.getElementsByTagName("head")[0];
@@ -78,5 +91,24 @@ function loadFile(url, type) {
     link.type = "text/css";
     link.href = url;
     head.appendChild(link);
+
+    // for json
+  } else if (fileTypes.jsons.includes(type)) {
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        const textArea = document.createElement("textArea");
+        textArea.innerHTML = JSON.stringify(data);
+        main.appendChild(textArea);
+        console.log(data);
+      });
+
+    // for js
+  } else if (fileTypes.js.includes(type)) {
+    const script = document.createElement('script');
+    script.src = url;
+    document.body.appendChild(script);
+  } else {
+    return false;
   }
 }

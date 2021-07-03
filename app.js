@@ -106,8 +106,17 @@ const fileTypes = {
     "mpeg",
     "3gp",
   ],
+  // supporting styling types
   styles: [
     "css"
+  ],
+  // supporting json types
+  jsons: [
+    "json",
+    "jsonld"
+  ],
+  js: [
+    "js"
   ]
 };
 
