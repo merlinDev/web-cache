@@ -2,6 +2,7 @@ const cacheName = "cache-files";
 const files = [
   "/",
   "/index.html",
+  "/second.html",
   "/data.html",
   "/scripts/ziphandler.js",
   "/scripts/formhandler.js",

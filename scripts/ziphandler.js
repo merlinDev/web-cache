@@ -105,7 +105,7 @@ function loadFile(url, type) {
 
     // for js
   } else if (fileTypes.js.includes(type)) {
-    const script = document.createElement('script');
+    const script = document.createElement("script");
     script.src = url;
     document.body.appendChild(script);
   } else {

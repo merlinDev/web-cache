@@ -59,13 +59,21 @@
                 <button type="button" onclick="processForm('mock-form-2')">SEND DATA</button>
             </div>
           </form>
+
+          <div style="margin-top: 2rem">
+            <input style="width: 24px" type="checkbox" id="ping" />
+            <label for="ping">ping the server</label>
+          </div>
+          <small style="font-size: 12px;">(forcing to check on internet connection by pinging the server)</small>
+        </div>
   
         </div>
       </div>
     </body>
   
     <!-- must add these two scrips to each and every pages at the end -->
-    <script src="formhandler.js"></script>
-    <script src="ziphandler.js"></script>
+    <script src="app.js"></script>
+    <script src="scripts/ziphandler.js"></script>
+    <script src="scripts/formhandler.js"></script>
 </body>
 </html>
