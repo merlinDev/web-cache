@@ -1,0 +1,1 @@
+alert('this alert triggered from the new js file');

@@ -1,35 +1,26 @@
-const zipURL = `${_zipdir}data.zip`;
+// const zipURL = `${_zipdir}data.zip`;
+const dataURL = "../data/";
 
-storeZip(zipURL);
-readFile("data.css");
+// old code
+// storeZip(zipURL);
+// readFile("data.css");
 
-function storeZip(url) {
-  caches.open("cache-files").then((cache) => {
-    cache
-      .add(url)
-      .then(() => console.log("zip added to the cache"))
-      .catch((error) => {
-        console.log("error: ", error);
-      });
-  });
-}
+// function readFile(filename) {
+//   console.log(`reading file ${filename}...`);
 
-function readFile(filename) {
-  console.log(`reading file ${filename}...`);
-
-  const type = filename.split(".").pop();
-  const loader = new ZipLoader(zipURL);
-  loader
-    .load()
-    .then(() => {
-      const url = loader.extractAsBlobUrl(filename, mimeTypes[type]);
-      loadFile(url, type);
-    })
-    .catch((error) => {
-      alert("requested file is not in the file or this file does not support!");
-      console.log("error: ", error);
-    });
-}
+//   const type = filename.split(".").pop();
+//   const loader = new ZipLoader(zipURL);
+//   loader
+//     .load()
+//     .then(() => {
+//       const url = loader.extractAsBlobUrl(filename, mimeTypes[type]);
+//       loadFile(url, type);
+//     })
+//     .catch((error) => {
+//       alert("requested file is not in the file or this file does not support!");
+//       console.log("error: ", error);
+//     });
+// }
 
 function loadFile(url, type) {
   console.log("reading file...");
@@ -71,7 +62,7 @@ function loadFile(url, type) {
     audio.src = url;
     audio.type = mimeTypes[type];
     audio.autoplay = true;
-    audio.controls = true;
+    // audio.controls = true;
     main.appendChild(audio);
 
     // for videos
@@ -79,7 +70,7 @@ function loadFile(url, type) {
     const video = document.createElement("video");
     video.src = url;
     video.type = mimeTypes[type];
-    video.controls = true;
+    // video.controls = true;
     video.autoplay = true;
     main.appendChild(video);
 
@@ -111,4 +102,93 @@ function loadFile(url, type) {
   } else {
     return false;
   }
+}
+
+// jszip part
+createZip();
+// readFile('data.css');
+async function createZip() {
+  const fileLinks = [
+    "new.css",
+    "data.css",
+    "data.html",
+    "data.mp3",
+    "data.mp4",
+    "data.png",
+    "data.svg",
+    "data.xml",
+    "data.json",
+    "data.js",
+  ];
+
+  const zip = new JSZip();
+  let filesAdded = false;
+  fileLinks.forEach((filename, index) => {
+    const link = dataURL + filename;
+    fetch(link)
+      .then((response) => response.blob())
+      .then((file) => {
+        zip.file(filename, file);
+        if (index === fileLinks.length - 1) {
+          filesAdded = true;
+        }
+      });
+  });
+
+  const awaitFiles = setInterval(() => {
+    if (filesAdded) {
+      zip
+        .generateAsync({ type: "base64" })
+        .then((data) => {
+          const url = generateURL("zip", data);
+          storeZip(url);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      clearInterval(awaitFiles);
+    }
+  }, 300);
+
+  console.log(zip);
+}
+
+function storeZip(url) {
+  if (typeof Storage !== "undefined") {
+    localStorage.setItem("data", url);
+    readFile('data.css');
+  }
+
+  // old code
+  // caches.open("cache-files").then((cache) => {
+  //   cache
+  //     .add(url)
+  //     .then(() => console.log("zip added to the cache"))
+  //     .catch((error) => {
+  //       console.log("error: ", error);
+  //     });
+  // });
+}
+
+function readFile(filename) {
+  const type = filename.split(".").pop();
+  const zipURL = localStorage.getItem("data");
+  fetch(zipURL)
+    .then((response) => response.blob())
+    .then((blob) => {
+      JSZip.loadAsync(blob).then((zip) => {
+        zip
+          .file(filename)
+          .async("base64")
+          .then((data) => {
+            const url = generateURL(type, data);
+            loadFile(url, type);
+          });
+      });
+    });
+}
+
+function generateURL(type, base64) {
+  const mime = mimeTypes[type];
+  return `data:${mime};base64,${base64}`;
 }
