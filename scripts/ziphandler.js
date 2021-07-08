@@ -149,14 +149,16 @@ async function createZip() {
       clearInterval(awaitFiles);
     }
   }, 300);
-
-  console.log(zip);
 }
 
 function storeZip(url) {
   if (typeof Storage !== "undefined") {
-    localStorage.setItem("data", url);
-    readFile('data.css');
+    if (!localStorage.getItem("data")) {
+      console.log('storing zip file...');
+      localStorage.setItem("data", url);
+    }
+
+    readFile("data.css");
   }
 
   // old code
