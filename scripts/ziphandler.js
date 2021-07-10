@@ -29,6 +29,8 @@ function loadFile(url, type) {
 
   // for images
   if (fileTypes.images.includes(type)) {
+    alert(url);
+
     const img = document.createElement("img");
     img.src = url;
     main.appendChild(img);
@@ -38,6 +40,8 @@ function loadFile(url, type) {
     fetch(url)
       .then((response) => response.text())
       .then((raw) => {
+        alert(raw);
+
         const html = parser.parseFromString(raw, mimeTypes[type]);
         const textArea = document.createElement("textarea");
         textArea.innerHTML = html.body.innerHTML;
@@ -50,6 +54,8 @@ function loadFile(url, type) {
     fetch(url)
       .then((response) => response.text())
       .then((raw) => {
+        alert(raw);
+
         const xml = parser.parseFromString(raw, mimeTypes[type]);
         const textArea = document.createElement("textarea");
         textArea.innerHTML = xml.getElementsByTagName("catalog")[0].innerHTML;
@@ -58,6 +64,8 @@ function loadFile(url, type) {
 
     // for audios
   } else if (fileTypes.audios.includes(type)) {
+    alert(url);
+
     const audio = document.createElement("audio");
     audio.src = url;
     audio.type = mimeTypes[type];
@@ -67,6 +75,8 @@ function loadFile(url, type) {
 
     // for videos
   } else if (fileTypes.videos.includes(type)) {
+    alert(url);
+
     const video = document.createElement("video");
     video.src = url;
     video.type = mimeTypes[type];
@@ -83,6 +93,10 @@ function loadFile(url, type) {
     link.href = url;
     head.appendChild(link);
 
+    fetch(url)
+      .then((response) => response.text())
+      .then((data) => alert(data));
+
     // for json
   } else if (fileTypes.jsons.includes(type)) {
     fetch(url)
@@ -91,6 +105,8 @@ function loadFile(url, type) {
         const textArea = document.createElement("textArea");
         textArea.innerHTML = JSON.stringify(data);
         main.appendChild(textArea);
+
+        alert(JSON.stringify(data));
         console.log(data);
       });
 
@@ -99,6 +115,10 @@ function loadFile(url, type) {
     const script = document.createElement("script");
     script.src = url;
     document.body.appendChild(script);
+
+    fetch(url)
+      .then((response) => response.text())
+      .then((data) => alert(data));
   } else {
     return false;
   }
@@ -141,7 +161,7 @@ async function createZip() {
         .generateAsync({ type: "base64" })
         .then((data) => {
           const url = generateURL("zip", data);
-          storeZip(url);
+          storeZip(url, false);
         })
         .catch((err) => {
           console.log(err);
@@ -151,14 +171,18 @@ async function createZip() {
   }, 300);
 }
 
-function storeZip(url) {
+function storeZip(url, updating) {
   if (typeof Storage !== "undefined") {
-    if (!localStorage.getItem("data")) {
-      console.log('storing zip file...');
+    if (updating) {
+      localStorage.removeItem("data");
       localStorage.setItem("data", url);
+    } else {
+      if (!localStorage.getItem("data")) {
+        console.log("storing zip file...");
+        localStorage.setItem("data", url);
+      }
     }
-
-    readFile("data.css");
+    readFile("data.css", false);
   }
 
   // old code
@@ -170,6 +194,37 @@ function storeZip(url) {
   //       console.log("error: ", error);
   //     });
   // });
+}
+
+function cacheFile() {
+  const fileChooser = document.querySelector("#file");
+  const file = fileChooser.files[0];
+
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = (e) => {
+    const dataURL = e.target.result;
+
+    const zipURL = localStorage.getItem("data");
+    if (zipURL) {
+      fetch(zipURL)
+        .then((response) => response.blob())
+        .then((blob) => {
+          JSZip.loadAsync(blob).then((zip) => {
+            zip.file(file.name, file);
+            zip
+              .generateAsync({ type: "base64" })
+              .then((data) => {
+                const url = generateURL("zip", data);
+                storeZip(url, true);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+        });
+    }
+  };
 }
 
 function readFile(filename) {
