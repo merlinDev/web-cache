@@ -1,5 +1,6 @@
 // const zipURL = `${_zipdir}data.zip`;
 const dataURL = "../data/";
+let fileBlob;
 
 // old code
 // storeZip(zipURL);
@@ -122,6 +123,13 @@ function loadFile(url, type) {
   } else {
     return false;
   }
+
+  fetch(url)
+    .then((response) => response.blob())
+    .then((blob) => {
+      fileBlob = blob;
+      console.log("here is the blob: ", fileBlob);
+    });
 }
 
 // jszip part
