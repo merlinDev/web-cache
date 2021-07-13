@@ -154,7 +154,7 @@ async function createZip() {
 function storeZip(url) {
   if (typeof Storage !== "undefined") {
     if (!localStorage.getItem("data")) {
-      console.log('storing zip file...');
+      console.log("storing zip file...");
       localStorage.setItem("data", url);
     }
 
