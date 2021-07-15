@@ -1,0 +1,112 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&display=swap");
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: rgb(20, 20, 29);
+  color: white;
+  font-size: 16px;
+}
+
+.main {
+  width: 100%;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  input {
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    border-radius: 4px;
+    border: none;
+  }
+
+  button {
+    border: none;
+    padding: 0.5rem 2rem;
+    color: white;
+    border-radius: 4px;
+    background-color: #3ba819;
+    transition: 0.3s;
+    cursor: pointer;
+    &:hover {
+      background-color: #24690f;
+    }
+  }
+}
+
+.files{
+  margin-top: .2rem;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: .5rem;
+}
+
+.file {
+  margin: 0.3rem;
+  display: inline-block;
+  background-color: rgba(163, 163, 163, 0.2);
+  font-size: 12px;
+  padding: 0.4rem 1rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background-color: rgba(87, 87, 87, 0.2);
+  }
+}
+
+#playground {
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.1);
+
+  img,
+  video {
+    max-width: 270px !important;
+  }
+  * {
+    margin: 0.5rem 1rem;
+  }
+}
+
+.add-file {
+  input {
+    display: none;
+  }
+
+  label {
+    display: inline-block;
+    padding: 0.2rem 1.5rem;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 1px solid#3ba819;
+    border-radius: 4px;
+    &:hover {
+      background-color: #1b6405;
+    }
+    img {
+      width: 12px;
+      margin-right: 0.2rem;
+    }
+  }
+}
+
+.alert {
+  color: white;
+  font-weight: 400;
+  padding: 0.5rem 2rem;
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  opacity: 0;
+  transition: 0.3s;
+  border-radius: 4px;
+}
+
+.showAlert {
+  opacity: 1 !important;
+}

@@ -4,45 +4,62 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="data/data.css" />
     <title>zip playground</title>
   </head>
   <body>
-    <div style="margin-top: 5rem" class="main">
-      <div>
-        <input
-          type="text"
-          name="filename"
-          id="filename"
-          placeholder="filename"
-        />
-        <button onclick="readFile(document.querySelector('#filename').value)">
-          load file
-        </button>
-        <div style="margin-top: 2rem">
-          <div><small>Try typing bellow files without internet,</small></div>
-          <div>
-            <ul>
-                <li>new.css</li>
-                <li>data.html</li>
-                <li>data.mp3</li>
-                <li>data.mp4</li>
-                <li>data.png</li>
-                <li>data.svg</li>
-                <li>data.xml</li>
-                <li>data.json</li>
-                <li>data.js</li>
-            </ul>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="main">
+            <div>
+              <input
+                type="text"
+                name="filename"
+                id="filename"
+                placeholder="filename"
+              />
+              <button
+                onclick="readFile(document.querySelector('#filename').value)"
+              >
+                load file
+              </button>
+              <div style="margin-top: 2rem">
+                <div>
+                  <small>Inside the Zip File,</small>
+                </div>
+                <div class="files">
+                  
+                </div>
+              </div>
+
+              <div style="margin-top: 2rem">
+                <div class="add-file">
+                  <label for="file" class="add-file">
+                    <img src="data/add.svg" alt="" />
+                    <span>add file</span>
+                  </label>
+                  <input type="file" name="file" id="file" />
+                </div>
+                <div></div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div style="margin-top: 2rem;">
-          <div><input type="file" name="file" id="file"></div>
-          <div><button onclick="cacheFile()">add file to the zip</button></div>
+        <div class="col-md-6">
+          <div id="playground"></div>
         </div>
       </div>
     </div>
 
-    <div id="playground"></div>
+    <div class="alert" id="alert"></div>
 
     <script src="app.js"></script>
     <script src="scripts/ziphandler.js"></script>

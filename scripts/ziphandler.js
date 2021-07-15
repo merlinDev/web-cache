@@ -120,6 +120,18 @@ function loadFile(url, type) {
     fetch(url)
       .then((response) => response.text())
       .then((data) => alert(data));
+    // for text
+  } else if (fileTypes.text.includes(type)) {
+    fetch(url)
+      .then((response) => response.text())
+      .then((data) => {
+        const textArea = document.createElement("textArea");
+        textArea.innerHTML = JSON.stringify(data);
+        main.appendChild(textArea);
+
+        alert(JSON.stringify(data));
+        console.log(data);
+      });
   } else {
     return false;
   }
@@ -190,7 +202,7 @@ function storeZip(url, updating) {
         localStorage.setItem("data", url);
       }
     }
-    readFile("data.css", false);
+    loadFiles();
   }
 
   // old code
@@ -204,10 +216,14 @@ function storeZip(url, updating) {
   // });
 }
 
-function cacheFile() {
-  const fileChooser = document.querySelector("#file");
-  const file = fileChooser.files[0];
+const fileChooser = document.querySelector("#file");
+fileChooser.onchange = (e) => {
+  cacheFile();
+};
 
+function cacheFile() {
+  const file = fileChooser.files[0];
+  fileChooser.value = null;
   const reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onload = (e) => {
@@ -225,6 +241,7 @@ function cacheFile() {
               .then((data) => {
                 const url = generateURL("zip", data);
                 storeZip(url, true);
+                showAlert(`${file.name} added to the zip`, "#3ba819");
               })
               .catch((err) => {
                 console.log(err);
@@ -242,13 +259,15 @@ function readFile(filename) {
     .then((response) => response.blob())
     .then((blob) => {
       JSZip.loadAsync(blob).then((zip) => {
-        zip
-          .file(filename)
-          .async("base64")
-          .then((data) => {
+        const file = zip.file(filename);
+        if (file) {
+          file.async("base64").then((data) => {
             const url = generateURL(type, data);
             loadFile(url, type);
           });
+        } else {
+          showAlert(`${filename} not found`, "#dd2d16");
+        }
       });
     });
 }
@@ -256,4 +275,35 @@ function readFile(filename) {
 function generateURL(type, base64) {
   const mime = mimeTypes[type];
   return `data:${mime};base64,${base64}`;
+}
+
+const alertBox = document.querySelector("#alert");
+function showAlert(message, color) {
+  alertBox.innerHTML = message;
+  alertBox.classList.add("showAlert");
+  alertBox.style.backgroundColor = color;
+  setTimeout(() => {
+    alertBox.classList.remove("showAlert");
+  }, 1500);
+}
+
+function loadFiles() {
+  const filesPan = document.querySelector(".files");
+  filesPan.innerHTML = null;
+
+  const zipURL = localStorage.getItem("data");
+  fetch(zipURL)
+    .then((response) => response.blob())
+    .then((blob) => {
+      JSZip.loadAsync(blob).then((zip) => {
+        const files = zip.files;
+        for (let file in files) {
+          const span = document.createElement("span");
+          span.innerHTML = file;
+          span.className = "file";
+          span.onclick = () => readFile(file);
+          filesPan.appendChild(span);
+        }
+      });
+    });
 }

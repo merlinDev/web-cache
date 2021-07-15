@@ -117,6 +117,9 @@ const fileTypes = {
   ],
   js: [
     "js"
+  ],
+  text: [
+    "txt"
   ]
 };
 
